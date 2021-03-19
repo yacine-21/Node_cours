@@ -5,11 +5,12 @@
   "main": "js.js",
   "scripts": {
     "start": "node js.js",
-    "dev" :"nodemon js.js"
+    "dev": "nodemon js.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1"
   }
 }

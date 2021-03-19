@@ -1,8 +1,8 @@
 const { toUpperCase } = require("../utils")
 
 function serialization(req, res){
-    console.log(req.ip);
-    return res.send(toUpperCase(res.rawResponse));
+    console.log("response ok")
+    return res.send(res.rawResponse);
 }
 
 module.exports = serialization;

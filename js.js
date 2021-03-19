@@ -13,6 +13,7 @@ const showOP = require("./src/actions/showOP");
 const showHxH = require("./src/actions/showHxH");
 const showSNK = require("./src/actions/showSNK");
 const showKNY = require("./src/actions/showKNY");
+const listOrgRepos = require("./src/actions/github/listOrgRepos")
 const app = express();
 app.use(express.static(__dirname + '/public'));
 
@@ -26,12 +27,12 @@ app.get("/AllcharacterAnime/OP",showOP);
 app.get("/AllcharacterAnime/HxH",showHxH);
 app.get("/AllcharacterAnime/SNK",showSNK);
 app.get("/AllcharacterAnime/KNY",showKNY);
-
 app.get('/html',function(req,res){
     res.sendFile(path.join(__dirname+'/index.html'));
   });
 
+app.get("/orgs/:org/repos",listOrgRepos,serialization);
+
 const PORT = process.env.PORT || 1234;
 
 app.listen(PORT, () => console.log("Server Started at http://" + process.env.URL + ":" + PORT))
-

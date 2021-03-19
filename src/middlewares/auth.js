@@ -1,6 +1,6 @@
 
 function auth (req, res, next){
-    if(req.query.token && req.query.mdp){
+    if(req.headers.authorization){
         return next();
     }
 
