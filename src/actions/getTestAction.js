@@ -5,6 +5,7 @@ function getTestAction(req, res, next){
     // console.log(req)
     const query = req.query.phrase;
     res.rawResponse = query;
+    console.log(res)
     return next();
 }
 

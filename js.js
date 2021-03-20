@@ -56,6 +56,7 @@ app.post("/characters", (req, res) =>{
     console.log(err)
     return res.send(err);
   })
+  req.query.model = character.body;
 }); 
 
 const PORT = process.env.PORT || 1234;
