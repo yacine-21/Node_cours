@@ -1,6 +1,6 @@
 // déclaration de variables
-require("dotenv").config();
 const path = require('path');
+require("dotenv").config();
 const express = require("express");
 const auth = require("./src/middlewares/auth");
 const rateLimit = require("./src/middlewares/rateLimit");
@@ -13,10 +13,14 @@ const showOP = require("./src/actions/showOP");
 const showHxH = require("./src/actions/showHxH");
 const showSNK = require("./src/actions/showSNK");
 const showKNY = require("./src/actions/showKNY");
-const listOrgRepos = require("./src/actions/github/listOrgRepos")
+const listOrgRepos = require("./src/actions/github/listOrgRepos");
+const connectDB = require("./src/middlewares/connectDB")
+const characterShema = require("./models/character")
 const app = express();
-app.use(express.static(__dirname + '/public'));
 
+connectDB();
+
+app.use(express.static(__dirname + '/public'));
 
 // Route GET
 app.get("/", showHome)
@@ -27,11 +31,32 @@ app.get("/AllcharacterAnime/OP",showOP);
 app.get("/AllcharacterAnime/HxH",showHxH);
 app.get("/AllcharacterAnime/SNK",showSNK);
 app.get("/AllcharacterAnime/KNY",showKNY);
-app.get('/html',function(req,res){
-    res.sendFile(path.join(__dirname+'/index.html'));
-  });
+app.get('/html', function(req,res){
+  res.sendFile(path.join(__dirname+'/index.html'));
+});
 
 app.get("/orgs/:org/repos",listOrgRepos,serialization);
+
+// POST
+app.post("/characters", (req, res) =>{
+  character = new characterShema({
+    body: {
+      name: "Monkey D Luffy",
+      Power: "Gomu Gomu no mi",
+      Background: "An elastic man who dream to become the king of pirates",
+      prime: 150000000,
+  }
+  });
+
+  character.save()
+  .then(character =>{
+    res.status(200).send(character)
+  })
+  .catch(err  =>{
+    console.log(err)
+    return res.send(err);
+  })
+}); 
 
 const PORT = process.env.PORT || 1234;
 
