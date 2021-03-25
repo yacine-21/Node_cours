@@ -27,13 +27,17 @@ const showHxH             = require("./src/actions/showHxH");
 const showSNK             = require("./src/actions/showSNK");
 const showKNY             = require("./src/actions/showKNY");
 const showHP              = require("./src/actions/showHP");
+
+// CHARACTERS
+const getACharacter       = require("./src/actions/characters/getACharacter");
+const deleteACharacter    = require("./src/actions/characters/deleteACharacter");
+const createACharacter    = require("./src/actions/characters/createACharacter");
+const updateACharacter    = require("./src/actions/characters/updateACharacter");
+
+// GITHUB
 const listOrgRepos        = require("./src/actions/github/listOrgRepos");
 const getSingleRepo       = require("./src/actions/github/getSingleRepo");
 const updateArepoGithub   = require("./src/actions/github/updateArepoGithub");
-const getAcharacter       = require("./src/actions/getAcharacter");
-const deleteAcharacter    = require("./src/actions/deleteAcharacter");
-const createAcharacter    = require("./src/actions/createAcharacter");
-const updateAcharacter    = require("./src/actions/updateAcharacter");
 
 // MONGO DB
 const connectDB           = require("./src/middlewares/connectDB");
@@ -62,16 +66,16 @@ app.patch("/repos/:owner/:repo", updateArepoGithub, serialization);
 // ACTIONS WITH MONGO DB
 
 // REQUETE GET -- GET A CHARACTER
-app.get("/api/character/:characterID", getAcharacter);
+app.get("/api/character/:characterID", getACharacter);
 
 // REQUETE POST -- CREATE A CHARACTER
-app.post("/api/characters", createAcharacter);
+app.post("/api/characters", createACharacter);
 
 // REQUETE DELETE -- DELETE A CHARACTER
-app.delete("/api/character/:id", deleteAcharacter);
+app.delete("/api/character/:id", deleteACharacter);
 
 // PATCH DELETE -- UPDATE A CHARACTER
-app.patch("/api/character/:id", updateAcharacter);
+app.patch("/api/character/:id", updateACharacter);
 
 const PORT = process.env.PORT || 1234;
 app.listen(PORT, () =>

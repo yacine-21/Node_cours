@@ -1,4 +1,4 @@
-const characterShema = require("../../models/character");
+const characterShema = require("../../../models/character");
 
 
 function deleteAcharacter(req, res){

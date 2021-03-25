@@ -1,4 +1,4 @@
-const characterShema = require("../../models/character");
+const characterShema = require("../../../models/character");
 
 function getAcharacter(req, res){
     const id = req.params.characterID;
