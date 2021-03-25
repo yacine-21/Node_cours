@@ -2,13 +2,11 @@ const axios = require("axios");
 
 const githubToken = process.env.githubToken
 function listOrgRepos(req,res,next){
-
     let options = {
         method: 'GET',
-        url: `${process.env.github_api_url}/${req.query.org}/repos`,
+        url: `${process.env.github_api_url}/orgs/${req.params.org}/repos`,
         headers: {Authorization: `token ${githubToken}`}
     };
-
     axios.request(options)
     .then(function (response) {
         res.rawResponse = response.data;
@@ -16,8 +14,6 @@ function listOrgRepos(req,res,next){
     })
     .catch(function (error) { 
         res.rawResponse = error.message;
-        console.error(error);
-        console.log(req.query.org)
         return next();
     });
 }

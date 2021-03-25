@@ -45,9 +45,9 @@ app.get('/html', function(req,res){
 app.get("/orgs/:org/repos",listOrgRepos,serialization);
 app.get("/repos/owner/name",getSingleRepo,serialization);
 
-
+  
 // REQUETE PATCH 
-app.patch("/repos/:owner/repo", updateArepoGithub, serialization);
+app.patch("/repos/:owner/:repo", updateArepoGithub, serialization);
 
 
 // REQUETE POST

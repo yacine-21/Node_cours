@@ -5,7 +5,7 @@ const githubToken = process.env.githubToken;
 function updateArepo(req, res, next) {
   let options = {
     method: "PATCH",
-    url: `${process.env.github_api_url}/repos/${req.query.owner}/${req.query.repo}`,
+    url: `${process.env.github_api_url}/repos/${req.params.owner}/${req.params.repo}`,
     headers: {
       Authorization: `token ${githubToken}`,
       "Content-Type": "application/json",
