@@ -1,6 +1,10 @@
 // déclaration de variables
 const path = require('path');
-require("dotenv").config();
+
+if(process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require("express");
 const auth = require("./src/middlewares/auth");
 const rateLimit = require("./src/middlewares/rateLimit");
@@ -14,13 +18,17 @@ const showHxH = require("./src/actions/showHxH");
 const showSNK = require("./src/actions/showSNK");
 const showKNY = require("./src/actions/showKNY");
 const listOrgRepos = require("./src/actions/github/listOrgRepos");
+const getSingleRepo = require("./src/actions/github/getSingleRepo");
+const updateArepoGithub = require("./src/actions/github/updateArepoGithub")
 const connectDB = require("./src/middlewares/connectDB");
 const characterShema = require("./models/character");
 const app = express();
+const bodyParser = require('body-parser');
 
 connectDB();
 
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json())
 
 // Route GET
 app.get("/", showHome);
@@ -34,10 +42,16 @@ app.get("/AllcharacterAnime/KNY",showKNY);
 app.get('/html', function(req,res){
   res.sendFile(path.join(__dirname+'/index.html'));
 });
-
 app.get("/orgs/:org/repos",listOrgRepos,serialization);
+app.get("/repos/owner/name",getSingleRepo,serialization);
 
-// POST
+
+// REQUETE PATCH 
+app.patch("/repos/:owner/repo", updateArepoGithub, serialization);
+
+
+// REQUETE POST
+
 app.post("/api/characters", (req, res) =>{
   character = new characterShema({
     body: {

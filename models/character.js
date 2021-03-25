@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const characterShema = new mongoose.Schema({
     body: {
         nom:  String,
-        Power: String,
-        Background: String,
+        power: String,
+        background: String,
         prime: Number
       },
   },{
