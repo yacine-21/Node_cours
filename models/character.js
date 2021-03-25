@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const characterShema = new mongoose.Schema({
     body: {
-        name:  String,
+        nom:  String,
         Power: String,
         Background: String,
         prime: Number

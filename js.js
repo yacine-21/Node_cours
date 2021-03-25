@@ -14,8 +14,8 @@ const showHxH = require("./src/actions/showHxH");
 const showSNK = require("./src/actions/showSNK");
 const showKNY = require("./src/actions/showKNY");
 const listOrgRepos = require("./src/actions/github/listOrgRepos");
-const connectDB = require("./src/middlewares/connectDB")
-const characterShema = require("./models/character")
+const connectDB = require("./src/middlewares/connectDB");
+const characterShema = require("./models/character");
 const app = express();
 
 connectDB();
@@ -23,7 +23,7 @@ connectDB();
 app.use(express.static(__dirname + '/public'));
 
 // Route GET
-app.get("/", showHome)
+app.get("/", showHome);
 app.get("/test",auth,rateLimit, getTestAction,serialization);
 app.get("/sum", rateLimit,sumAction,serialization);
 app.get("/AllcharacterAnime",showAnime);
@@ -38,25 +38,22 @@ app.get('/html', function(req,res){
 app.get("/orgs/:org/repos",listOrgRepos,serialization);
 
 // POST
-app.post("/characters", (req, res) =>{
+app.post("/api/characters", (req, res) =>{
   character = new characterShema({
     body: {
-      name: "Monkey D Luffy",
-      Power: "Gomu Gomu no mi",
-      Background: "An elastic man who dream to become the king of pirates",
-      prime: 150000000,
+      nom: req.body.nom,
+      power: req.body.power,
+      background: req.body.background,
+      prime: req.body.prime
   }
   });
 
   character.save()
-  .then(character =>{
-    res.status(200).send(character)
-  })
-  .catch(err  =>{
-    console.log(err)
-    return res.send(err);
-  })
+  .then(character => res.status(200).send(character))
+  .catch(err  => res.send(err))
+  
   req.query.model = character.body;
+  characterName = req.query.model.name;
 }); 
 
 const PORT = process.env.PORT || 1234;

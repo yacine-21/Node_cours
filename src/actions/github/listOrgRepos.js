@@ -1,5 +1,4 @@
 const axios = require("axios");
-require("dotenv").config();
 
 const githubToken = process.env.githubToken
 function listOrgRepos(req,res,next){

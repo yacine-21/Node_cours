@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = () => {
-    mongoose.connect("mongodb+srv://appnode:ly92140CLM@cluster0.u5gvj.mongodb.net/cours_node?retryWrites=true&w=majority", {
+    mongoose.connect("mongodb+srv://appnode:"+ process.env.mongoDB_psw+"@cluster0.u5gvj.mongodb.net/cours_node?retryWrites=true&w=majority", {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });

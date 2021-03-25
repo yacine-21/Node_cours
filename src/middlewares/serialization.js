@@ -6,7 +6,7 @@ function serialization(req, res){
     resultat = res.rawResponse;
     console.log(resultat)
     // return res.status(200).send("hey the result of " +  res.a  + " + " + res.b + " = "  + res.rawResponse);
-    return res.status(200).send("" + resultat);
+    return res.status(200).json(resultat);
 }
 
 module.exports = serialization;
