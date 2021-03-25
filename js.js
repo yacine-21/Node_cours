@@ -1,75 +1,79 @@
-// déclaration de variables
-const path = require('path');
+// VARIABLES DECLARATIONS
 
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+// DOTENV
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 
-const express = require("express");
-const auth = require("./src/middlewares/auth");
-const rateLimit = require("./src/middlewares/rateLimit");
-const serialization = require("./src/middlewares/serialization");
-const getTestAction = require("./src/actions/getTestAction");
-const sumAction = require("./src/actions/sum");
-const showHome = require("./src/actions/showHome");
-const showAnime = require("./src/actions/showAnime");
-const showOP = require("./src/actions/showOP");
-const showHxH = require("./src/actions/showHxH");
-const showSNK = require("./src/actions/showSNK");
-const showKNY = require("./src/actions/showKNY");
-const listOrgRepos = require("./src/actions/github/listOrgRepos");
-const getSingleRepo = require("./src/actions/github/getSingleRepo");
-const updateArepoGithub = require("./src/actions/github/updateArepoGithub")
-const connectDB = require("./src/middlewares/connectDB");
-const characterShema = require("./models/character");
-const app = express();
-const bodyParser = require('body-parser');
+// EXPRESS // BODY PARSER
+const express             = require("express");
+const app                 = express();
+const bodyParser          = require("body-parser");
+app.use(bodyParser.json());
 
+// MIDDLEWARES
+const auth                = require("./src/middlewares/auth");
+const rateLimit           = require("./src/middlewares/rateLimit");
+const serialization       = require("./src/middlewares/serialization");
+
+// ACTIONS
+
+const getTestAction       = require("./src/actions/getTestAction");
+const sumAction           = require("./src/actions/sum");
+const showHome            = require("./src/actions/showHome");
+const showAnime           = require("./src/actions/showAnime");
+const showOP              = require("./src/actions/showOP");
+const showHxH             = require("./src/actions/showHxH");
+const showSNK             = require("./src/actions/showSNK");
+const showKNY             = require("./src/actions/showKNY");
+const showHP              = require("./src/actions/showHP");
+const listOrgRepos        = require("./src/actions/github/listOrgRepos");
+const getSingleRepo       = require("./src/actions/github/getSingleRepo");
+const updateArepoGithub   = require("./src/actions/github/updateArepoGithub");
+const getAcharacter       = require("./src/actions/getAcharacter");
+const deleteAcharacter    = require("./src/actions/deleteAcharacter");
+const createAcharacter    = require("./src/actions/createAcharacter");
+const updateAcharacter    = require("./src/actions/updateAcharacter");
+
+// MONGO DB
+const connectDB           = require("./src/middlewares/connectDB");
+const characterShema      = require("./models/character");
 connectDB();
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json())
+// ROUTE GET
 
-// Route GET
 app.get("/", showHome);
-app.get("/test",auth,rateLimit, getTestAction,serialization);
-app.get("/sum", rateLimit,sumAction,serialization);
-app.get("/AllcharacterAnime",showAnime);
-app.get("/AllcharacterAnime/OP",showOP);
-app.get("/AllcharacterAnime/HxH",showHxH);
-app.get("/AllcharacterAnime/SNK",showSNK);
-app.get("/AllcharacterAnime/KNY",showKNY);
-app.get('/html', function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
-});
-app.get("/orgs/:org/repos",listOrgRepos,serialization);
-app.get("/repos/owner/name",getSingleRepo,serialization);
+app.get("/test", auth, rateLimit, getTestAction, serialization);
+app.get("/sum", rateLimit, sumAction, serialization);
+app.get("/AllcharacterAnime", showAnime);
+app.get("/AllcharacterAnime/OP", showOP);
+app.get("/AllcharacterAnime/HxH", showHxH);
+app.get("/AllcharacterAnime/SNK", showSNK);
+app.get("/AllcharacterAnime/KNY", showKNY);
+app.get("/html", showHP);
+app.get("/orgs/:org/repos", listOrgRepos, serialization);
+app.get("/repos/owner/name", getSingleRepo, serialization);
 
-  
-// REQUETE PATCH 
+// REQUETE PATCH -- UPDATE A REPO GITHUB
 app.patch("/repos/:owner/:repo", updateArepoGithub, serialization);
 
+// ----------------------------------- //
 
-// REQUETE POST
+// ACTIONS WITH MONGO DB
 
-app.post("/api/characters", (req, res) =>{
-  character = new characterShema({
-    body: {
-      nom: req.body.nom,
-      power: req.body.power,
-      background: req.body.background,
-      prime: req.body.prime
-  }
-  });
+// REQUETE GET -- GET A CHARACTER
+app.get("/api/character/:characterID", getAcharacter);
 
-  character.save()
-  .then(character => res.status(200).send(character))
-  .catch(err  => res.send(err))
-  
-  req.query.model = character.body;
-  characterName = req.query.model.name;
-}); 
+// REQUETE POST -- CREATE A CHARACTER
+app.post("/api/characters", createAcharacter);
+
+// REQUETE DELETE -- DELETE A CHARACTER
+app.delete("/api/character/:id", deleteAcharacter);
+
+// PATCH DELETE -- UPDATE A CHARACTER
+app.patch("/api/character/:id", updateAcharacter);
 
 const PORT = process.env.PORT || 1234;
-
-app.listen(PORT, () => console.log("Server Started at http://" + process.env.URL + ":" + PORT))
+app.listen(PORT, () =>
+  console.log("Server Started at http://" + process.env.URL + ":" + PORT)
+);
