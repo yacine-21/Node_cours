@@ -5,11 +5,13 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-// EXPRESS // BODY PARSER
+// EXPRESS // BODY PARSER // CORS
 const express             = require("express");
 const app                 = express();
 const bodyParser          = require("body-parser");
+const cors = require('cors');
 app.use(bodyParser.json());
+app.use(cors());
 
 // MIDDLEWARES
 const auth                = require("./src/middlewares/auth");
@@ -29,6 +31,7 @@ const showKNY             = require("./src/actions/showKNY");
 const showHP              = require("./src/actions/showHP");
 
 // CHARACTERS
+const getAllCharacters    = require("./src/actions/characters/getAllCharacter");
 const getACharacter       = require("./src/actions/characters/getACharacter");
 const deleteACharacter    = require("./src/actions/characters/deleteACharacter");
 const createACharacter    = require("./src/actions/characters/createACharacter");
@@ -41,7 +44,6 @@ const updateArepoGithub   = require("./src/actions/github/updateArepoGithub");
 
 // MONGO DB
 const connectDB           = require("./src/middlewares/connectDB");
-const characterShema      = require("./models/character");
 connectDB();
 
 // ROUTE GET
@@ -68,13 +70,16 @@ app.patch("/repos/:owner/:repo", updateArepoGithub, serialization);
 // REQUETE GET -- GET A CHARACTER
 app.get("/api/character/:characterID", getACharacter);
 
+// REQUETE GET -- GET ALL CHARACTER
+app.get("/api/characters/", getAllCharacters);
+
 // REQUETE POST -- CREATE A CHARACTER
 app.post("/api/characters", createACharacter);
 
 // REQUETE DELETE -- DELETE A CHARACTER
 app.delete("/api/character/:id", deleteACharacter);
 
-// PATCH DELETE -- UPDATE A CHARACTER
+// REQUETE PATCH -- UPDATE A CHARACTER
 app.patch("/api/character/:id", updateACharacter);
 
 const PORT = process.env.PORT || 1234;

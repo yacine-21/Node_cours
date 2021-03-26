@@ -1,5 +1,4 @@
 const characterShema = require("../../../models/character");
-c
 function updateAcharacter(req, res){
     const id = req.params.id;
 
